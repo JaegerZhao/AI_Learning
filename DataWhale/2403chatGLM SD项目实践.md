@@ -30,7 +30,7 @@
 
 **组织方：**Datawhale x 趋动云
 
-## 2 部署chatGLM3-6B模型
+## 2 云端部署chatGLM3-6B模型
 
 > ***ChatGLM3 是智谱AI和清华大学 KEG 实验室联合发布的新一代对话预训练模型。***
 >
@@ -86,9 +86,9 @@
 
 2. 填写镜像名称，构建镜像
 
-   填写自定义镜像名称后，在Dockerfile中，填写以下内容，创建镜像。
+   填写自定义镜像名称后，在Dockerfile中，填写以下内容，以之前选择的基础镜像，创建镜像。
 
-   ![image-20240311125516589](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240311125516589.png)
+   ![image-20240311171511654](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240311171511654.png)
 
    ```dockerfile
    RUN apt-get update && apt-get install unzip
@@ -343,3 +343,82 @@ Gradio是一个开源的Python库，用于创建机器学习模型的交互式�
    ![bf4f80b97bc9c2f6bbc06ca7d8594c2](https://raw.githubusercontent.com/ZzDarker/figure/main/img/bf4f80b97bc9c2f6bbc06ca7d8594c2.png)
 
 ​	可以看到，当 temperature 值较大时，回答的答案有推理思路，联想能力强，得到了正确的回答，而 temperature 值较小时，回答仅仅把题干中两个数字相加，未能理解题目的真正含义，死板的回复了错误的答案。
+
+## 3 云端部署StableDiffusion模型
+
+### 3.1 项目配置
+
+1. 创建项目
+
+   在趋动云用户工作台中，点击 **快速创建** ，选择 **创建项目**，创建新项目。
+
+2. 镜像配置
+
+   选择 **趋动云小助手** 的 `AUTOMATIC1111/stable-diffusion-webui` 镜像。
+
+   ![image-20240311172651842](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240311172651842.png)
+
+3. 数据集配置
+
+   在 **公开** 数据集中，选择 `stable-diffusion-models` 数据集。 
+
+   ![1710149308792](https://raw.githubusercontent.com/ZzDarker/figure/main/img/1710149308792.jpg)
+
+   配置完成后，点击创建，要求上传代码时，选择 **暂不上传** 。
+
+4. 初始化开发环境
+
+   找到最右侧 "**开发**"-> "**初始化开发环境实例**"，我这里没按教程配置，因为SD生图需要较大显存，我选择了拥有24G显存的 **B1.large**，其他按教程一样，并设置了24h的最长运行时间。
+
+   ![image-20240311173442914](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240311173442914.png)
+
+### 3.2 环境配置
+
+​	因为数据集代码有所变化，所以教程中有些步骤可以省略，以下为具体步骤。
+
+1. 解压代码及模型
+
+   ```shell
+   tar xf /gemini/data-1/stable-diffusion-webui.tar -C /gemini/code/ 
+   ```
+
+2. 拷贝frpc内网穿透文件
+
+   ```shell
+   chmod +x /root/miniconda3/lib/python3.10/sitepackages/gradio/frpc_linux_amd64_v0.2
+   ```
+
+3. 拷贝模型文件到项目目录下
+
+   ```shell
+   cp /gemini/data-1/v1-5-pruned-emaonly.safetensors /gemini/code/stable-diffusion-webui/
+   ```
+
+4. 更新系统httpx依赖
+
+   ```shell
+   pip install httpx==0.24.1
+   ```
+
+5. 运行项目
+
+   ```shell
+   cd /gemini/code/stable-diffusion-webui && python launch.py --deepdanbooru --share --xformers --listen
+   ```
+
+   运行项目后，点击右侧添加，创建 **外部访问链接** 。
+
+   ![1710149802068](https://raw.githubusercontent.com/ZzDarker/figure/main/img/1710149802068.jpg)
+
+6. 访问StableDiffusion的WebUI
+
+   复制外部访问链接，在浏览器粘贴并访问，就成功打开WebUI界面啦。
+
+   ![1710149919322](https://raw.githubusercontent.com/ZzDarker/figure/main/img/1710149919322.jpg)
+
+> 配置好环境后，再次访问，在终端输入以下指令直接运行 WebUI 。
+>
+> ```
+> cd /gemini/code/stable-diffusion-webui && python launch.py --deepdanbooru --share --xformers --listen
+> ```
+
