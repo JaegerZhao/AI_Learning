@@ -430,3 +430,115 @@ Gradio是一个开源的Python库，用于创建机器学习模型的交互式�
 > cd /gemini/code/stable-diffusion-webui && python launch.py --deepdanbooru --share --xformers --listen
 > ```
 
+### 3.3 StableDiffusion 使用
+
+1. 生成第一张美图
+
+   部署好了当然是要生成一张图，我选择生成一张猫猫图，结果如下。
+
+   ![image-20240312104308881](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240312104308881.png)
+
+   ​	库自带的模型是 `v1-5-pruned-emaonly` 模型，这个模型是官方的1.5 版本预训练模型，是在512*512的小尺寸图像上训练的，所以说如果图像尺寸超过1000的话，容易出现多头多人的情况。
+
+   ​	在这里我选择的参数与提示词如下：
+
+   - **提示词(prompt)**：
+
+     ```
+     1 cat
+     ```
+
+   - **负面提示词(Negative prompt)**：
+
+     ```
+     out of frame,(worst quality, low quality, normal quality:2),text,bad eyes,weird eyes closed eyes,badhandv4:0.8,OverallDetail,render,bad quality,worst quality,signature,watermark,extra limbs,
+     ```
+
+   - **迭代步数(Steps)**、**采样器(Sampler)**、**提示词相关性(CFG scale)**：
+
+     ```
+     Steps: 20, Sampler: DPM++ SDE Karras, CFG scale: 7, 
+     ```
+
+   - **随机种子(Seed)**、**图像尺寸(Size)**、**模型(Model)**
+
+     ```
+     Seed: 3052626755, Size: 384x512, Model hash: 6ce0161689, Model: v1-5-pruned-emaonly, Version: v1.6.0
+     ```
+
+   生成的猫猫图如下：
+
+   ![img](https://raw.githubusercontent.com/ZzDarker/figure/main/img/00002-3052626755.png)
+
+2. 批量生成
+
+   我想要更多的猫猫图，于是增大了生成的 `Batch Count` 和`Batch size`，生成结果如下。
+
+   ![image-20240312111137432](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240312111137432.png)
+
+   可以看到一下生成了16张猫猫图，它实际上是分了两批，每批生成8张，这样生成的。`Batch count` 控制了生成批次的数量，`Batch size` 控制每批生成图片的数量。`Batch size` 越大对显卡显存要求越高，当然白嫖的24g显存不在话下了。
+
+   ![img](https://raw.githubusercontent.com/ZzDarker/figure/main/img/grid-0000.png)
+
+   可以看到生成的图像各有千秋，甚至有的生成了个房子（太离谱了），所以选择合适的种子很重要。可以通过批量生成找到自己喜欢的图像风格的种子，固定下来进行进一步操作。
+
+   我很喜欢第四张，大脸狸花猫，于是点开图片，可以在图片下方看到种子号 `2617670965`。
+
+   ![image-20240312112233897](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240312112233897.png)
+
+3. 图像放大
+
+   我想放大刚才选中的大脸狸花猫图，可以通过固定种子，并通过 `Hires fix` 的方法放大生成图像。
+
+   我想使用一个名为 **R-ESRGAN4x** 的放大算法，从云平台下载太慢了，选择从 [该github链接](https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth) 本地下载，并放在`/gemini/code/stable-diffusion-webui/models/RealESRGAN/RealESRGAN_x4plus.pth`路径下。
+
+   设置以下参数，重新生成，结果如下。
+
+   ![image-20240312113245064](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240312113245064.png)
+
+   成功将图像尺寸放大到原来的两倍，即 768*1024 的尺寸。图像参数如下：
+
+   ```
+   1 cat
+   Negative prompt: out of frame,(worst quality, low quality, normal quality:2),text,bad eyes,weird eyes closed eyes,badhandv4:0.8,OverallDetail,render,bad quality,worst quality,signature,watermark,extra limbs,
+   Steps: 20, Sampler: DPM++ SDE Karras, CFG scale: 7, Seed: 2617670965, Size: 384x512, Model hash: 6ce0161689, Model: v1-5-pruned-emaonly, Denoising strength: 0.35, Hires upscale: 2, Hires upscaler: R-ESRGAN 4x+, Version: v1.6.0
+   ```
+
+   猫猫图如下：
+
+   ![00019-2617670965](https://raw.githubusercontent.com/ZzDarker/figure/main/img/00019-2617670965.png)
+
+   效果还不错，不过我还想让他更清晰一点，于是选择让他放大4倍，结果如下。
+
+   ![img](https://raw.githubusercontent.com/ZzDarker/figure/main/img/00020-2617670965.png)
+
+   可以看到，真的清晰了不少。
+
+4. 图生图
+
+   图生图就是以给的图片为基准，生成其他的图片，我就像用刚才生成的猫猫图，来生成一个宇宙的星系，于是写了以下的提示词。
+
+   ```
+   stars,out space,galaxy,
+   ```
+
+   负面提示词不变，分两个批次生成16张星系图片，结果如下。
+
+   ![image-20240312123732068](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240312123732068.png)
+
+   可以看到，生成了具有猫猫形状的星系图案，我从中挑了一张最喜欢的，就是下面这张。
+
+   ![img](https://raw.githubusercontent.com/ZzDarker/figure/main/img/00048-3318537879.png)
+
+   图片参数如下：
+
+   ```
+   stars,out space,galaxy,
+   Negative prompt: out of frame,(worst quality, low quality, normal quality:2),text,bad eyes,weird eyes closed eyes,badhandv4:0.8,OverallDetail,render,bad quality,worst quality,signature,watermark,extra limbs,
+   Steps: 20, Sampler: DPM++ 2M Karras, CFG scale: 3, Seed: 3318537879, Size: 768x1024, Model hash: 6ce0161689, Model: v1-5-pruned-emaonly, Denoising strength: 0.7, Version: v1.6.0
+   ```
+
+   以上就尝试玩SD的基本功能啦，之后可以再玩一些进阶玩法，用更厉害的模型，添加lora、ControlNet等插件，生成更可控好看的图片。
+
+
+
