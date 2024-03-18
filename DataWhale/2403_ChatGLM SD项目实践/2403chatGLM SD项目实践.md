@@ -540,5 +540,28 @@ Gradio是一个开源的Python库，用于创建机器学习模型的交互式�
 
    以上就尝试玩SD的基本功能啦，之后可以再玩一些进阶玩法，用更厉害的模型，添加lora、ControlNet等插件，生成更可控好看的图片。
 
+### 3.4 安装插件
 
+​	因为云平台版本原因，没办法直接安装插件、模型，会以下报错。
 
+![image-20240316195001576](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240316195001576.png)
+
+​	于是只能靠自己上传文件，或者从公共平台找合适的数据集。从公共数据集可以找到这个数据集，里面有许多常用的 扩展 和 模型 ，如常用的 麦橘真实`majicmixRealistic v7.safetensor`。
+
+![image-20240316213406488](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240316213406488.png)
+
+​	还有这个数据集，里面也有许多插件。
+
+![image-20240316214403436](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240316214403436.png)
+
+​	或者可以自己上传数据集，通过STFP上传文件。
+
+这时候，就可以通过其他模型来绘制更好看的图像，比如输入以下提示词，绘制图像如下。
+
+```
+1 girl,happy,real,
+Negative prompt: out of frame,(worst quality, low quality, normal quality:2),text,bad eyes,weird eyes closed eyes,OverallDetail,render,bad quality,worst quality,signature,watermark,extra limbs, bad-hands-5,bad_prompt_version2-neg
+Steps: 20, Sampler: DPM++ SDE Karras, CFG scale: 2, Seed: 2137894007, Size: 768x1024, Model hash: 7c819b6d13, Model: majicmixRealistic_v7, Version: v1.6.0
+```
+
+![image-20240316220422936](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240316220422936.png)
