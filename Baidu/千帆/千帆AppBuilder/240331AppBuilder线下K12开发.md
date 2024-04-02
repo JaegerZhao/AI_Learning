@@ -2,6 +2,8 @@
 
 ​	周日有幸参加了 **百度智能云千帆AppBuilder北京场线下交流会** ( [活动链接](https://mp.weixin.qq.com/s/VhECqCX57htBPsrow7grNg) )，去线下组队创作了 K12教育 相关的智能体。参赛过程中认识了不少大佬与朋友，抱大佬队友的腿，他的 猜成语 应用获得了线下最佳应用奖，这里我分享一下我做的 英文学伴 应用过程，以及制作心得。
 
+​	欢迎大家点击链接，来体验我的 [英文学伴](https://appbuilder.baidu.com/s/PRHDe) 应用。
+
 ![图片](https://raw.githubusercontent.com/ZzDarker/figure/main/img/640)
 
 ## 1 活动创意选择
@@ -133,9 +135,53 @@
 
 1. 英语对话
 
-   当用户提出要进行英语对话时，英语会调用 短文本在线合成-精品音库 工具，生成对应的回答音频。
+   当用户提出要进行英语对话时，英语会调用 **短文本在线合成-精品音库** 工具，生成对应的回答音频。
 
    ![image-20240331232956535](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240331232956535.png)
 
-   例如以上对话中，应用回答了 “*I started using social media about five years ago  when i was in high school  it was a great way to stay connected with my friends and family  and have been using it ever since.* ” 的音频。
+   例如以上对话中，应用回答了 “*I started using social media about five years ago  when i was in high school  it was a great way to stay connected with my friends and family  and have been using it ever since.* ” 的[音频](https://github.com/JaegerZhao/AI_Learning/blob/main/Baidu/%E5%8D%83%E5%B8%86/%E5%8D%83%E5%B8%86AppBuilder/Answer.wav)。
+
+2. 作文批改
+
+   当我上传以下图片，并要求应用批改作文时，便可调用  **手写文字识别** 进行文字识别。![英语作文](https://raw.githubusercontent.com/ZzDarker/figure/main/img/%E8%8B%B1%E8%AF%AD%E4%BD%9C%E6%96%87.jpg)
+
+   应用输出如下，成功的识别了文章的英文，并给出了批改意见，与修改后的作文。
+
+   ![image-20240331234624486](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240331234624486.png)
+
+### 3.3 功能演示
+
+​	除了以上调用工具实现的两个功能以外，下面来演示模型的其他功能。
+
+1. 生词组段
+
+   当用户输入一段生词后，应用会将其组成英文短文，并给出相应中文翻译，在文中会把生词的中英文标粗，并解释每个单词的含义。
+
+   ![image-20240331235008316](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240331235008316.png)
+
+2. 针对性出题
+
+   当用户让应用出题后，模型会根据任务出题，并不给出答案，在用户作答后，再进行评判点评。
+
+   ![image-20240331235321691](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240331235321691.png)
+
+### 3.4 应用设置
+
+1. 应用基础信息配置
+
+   模型大部分功能实现后，再设置应用名称、头像与引导词。
+
+   ![image-20240331235716467](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240331235716467.png)
+
+   配置结束，应用会添加头像与顶部信息，增加用户体验感。
+
+   ![image-20240331235835124](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240331235835124.png)
+
+2. 推荐问
+
+   添加推荐问题，更能让用户了解到这个应该的功能。
+
+   ![image-20240331235914363](https://raw.githubusercontent.com/ZzDarker/figure/main/img/image-20240331235914363.png)
+
+以上就是我的应用的创建思路与全部功能，应用有时也会出现不符合要求的回答，后期要是还想继续提升，需要增添知识库功能，添加中学词汇表等。
 
